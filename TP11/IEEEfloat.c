@@ -1,3 +1,4 @@
+//TP11: Visualización del formato de una variable de tipo float usando el formato IEEE754
 #include <stdio.h>
 union convert{
     float ieee_input;
@@ -6,28 +7,32 @@ union convert{
 unsigned int get_ieee_mantissa(float);
 unsigned int get_ieee_sign(float);
 unsigned int get_ieee_exp(float);
-void print_bits(unsigned int, int);
+void print_bits(unsigned int, int, char *);
 
 int main(void){
     float numb;
-    union convert input;
     printf("Ingrese un numero real:\n");
     scanf("%f", &numb);
-    input.ieee_input = numb;
-    print_bits(input.analyzer, 8 * sizeof(unsigned int));
-    printf("\n\n");
+
+    unsigned int mantisa = get_ieee_mantissa(numb);
+    unsigned int exp = get_ieee_exp(numb);
+    unsigned int sign = get_ieee_sign(numb);
+
+    print_bits(sign, 1, " ");
+    print_bits(exp, 8, " ");
+    print_bits(mantisa, 23, "\n\n");
 
     printf("Mantisa: ");
-    print_bits(get_ieee_mantissa(numb), 23);
-    printf(" (%u)\n", get_ieee_mantissa(numb));
+    print_bits(mantisa, 23, " ");
+    printf("(%u)\n", mantisa);
 
     printf("Exponente: ");
-    print_bits(get_ieee_exp(numb), 8);
-    printf(" (%u)\n", get_ieee_exp(numb));
+    print_bits(exp, 8, " ");
+    printf("(%u)\n", exp);
 
     printf("Signo: ");
-    print_bits(get_ieee_sign(numb), 1);
-    printf(" (%u)\n", get_ieee_sign(numb));
+    print_bits(sign, 1, " ");
+    printf("(%u)\n", sign);
     return 0;
 }
 
@@ -53,14 +58,10 @@ unsigned int get_ieee_sign(float num){
     }
     return input.analyzer;
 }
-void print_bits(unsigned int num, int bits){
+void print_bits(unsigned int num, int bits, char *c){
     unsigned int mask = 1 << 31; //1000000 00000000 00000000 000000000
-    for(int i = 0; i < 32; i++){
-        if (i >= 32 - bits){
-            if(!(i % 8) && i != 32 - bits)
-                printf(" ");
+    for(int i = 0; i < 32; i++, mask >>= 1)
+        if (i >= 32 - bits)
             printf("%d", mask & num ? 1 : 0);
-        }
-        mask >>= 1;
-    }
+    printf("%s", c);
 }
