@@ -21,7 +21,7 @@ int main(void){
     struct float_ieee input;
 
     input.mantissa = get_ieee_mantissa(numb);
-    input.exp =get_ieee_exp(numb);
+    input.exp = get_ieee_exp(numb);
     input.sign = get_ieee_sign(numb);
 
     print_bits(input.sign, 1, " ");
