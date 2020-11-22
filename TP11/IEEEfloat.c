@@ -59,9 +59,9 @@ unsigned int get_ieee_sign(float num){
     return input.analyzer;
 }
 void print_bits(unsigned int num, int bits, char *c){
-    unsigned int mask = 1 << 31; //1000000 00000000 00000000 000000000
-    for(int i = 0; i < 32; i++, mask >>= 1)
+    unsigned int mask = 1 << bits - 1;
+			for(int i = 0; i < bits; i++, mask >>= 1)
         if (i >= 32 - bits)
-            printf("%d", mask & num ? 1 : 0);
+					printf("%d", mask & num ? 1 : 0);
     printf("%s", c);
 }
